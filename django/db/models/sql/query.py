@@ -640,7 +640,7 @@ class Query(object):
 
         # Create a new alias for this table.
         if current:
-            alias = '%s%d' % (self.alias_prefix, len(self.alias_map) + 1)
+            alias = '%s%d' % (self.alias_prefix, sum([len(li) for li in self.table_map.values()]) + 1)
             current.append(alias)
         else:
             # The first occurence of a table uses the table name directly.

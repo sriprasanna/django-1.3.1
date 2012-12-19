@@ -452,13 +452,14 @@ class SQLCompiler(object):
                 result.append('%s%s%s' % (connector, qn(name), alias_str))
             first = False
         for t in self.query.extra_tables:
-            alias, unused = self.query.table_alias(t)
+            alias, unused = self.query.table_alias(t, True)
             # Only add the alias if it's not already present (the table_alias()
             # calls increments the refcount, so an alias refcount of one means
             # this is the only reference.
             if alias not in self.query.alias_map or self.query.alias_refcount[alias] == 1:
                 connector = not first and ', ' or ''
-                result.append('%s%s' % (connector, qn(alias)))
+                alias_str = (alias != t and ' %s' % alias or '')
+                result.append('%s%s%s' % (connector, qn(t), alias_str))
                 first = False
         return result, []
 
